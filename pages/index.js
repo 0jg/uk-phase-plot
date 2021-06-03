@@ -169,6 +169,11 @@ export default function Home(props) {
 									y: 40000,
 									label: "Jan 9 2021"
 								},
+								{
+									x: 150,
+									y: 800,
+									label: "Sep 1 2021"
+								},
 							]}
 							className="text-green fill-current"
 						/>
