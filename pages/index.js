@@ -164,7 +164,7 @@ export default function Home(props) {
 						<LabelSeries
 							data={[
 								{
-									x: 1400,
+									x: 2500,
 									y: 2200,
 									label: "Mar 23 2020"
 								},
