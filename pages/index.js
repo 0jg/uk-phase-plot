@@ -111,13 +111,13 @@ export default function Home(props) {
 					<span style={{color: "rgb(161, 93, 215)"}}>the second wave</span>. The <span style={{color:"rgb(41, 188, 155)"}}>latest data</span>  <span style={{color: "rgb(79, 227, 194)"}}>●</span> is shown.
 				</h2>
 
-				<div className="max-w-screen-sm h-screen m-auto pt-10">
+				<div className="max-w-screen-pg h-screen m-auto pt-10">
 					<FlexibleXYPlot
 						yType="log"
 						xType="log"
-						yDomain={[500, 40000]}
-						xDomain={[50, 5000]}
-						margin={{left: 100, bottom: 200}}
+						yDomain={[500,  40000]}
+						xDomain={[90, 5000]}
+						margin={{left: 60, bottom: 100}}
 						className="m-auto dark:text-white text-black fill-current text-md"
 					>
 						<HorizontalGridLines className="dark:text-gray-600 text-gray-300 border w-4 stroke-1 stroke-current" />
@@ -125,12 +125,12 @@ export default function Home(props) {
 							title="Daily admissions"
 							tickLabelAngle={-90}
 							tickFormat={v => v}
-							className="stroke-1 stroke-current font-extralight text-sm"
+							className="stroke-1 stroke-current font-extralight text-xs"
 						/>
 						<YAxis
 							title="Beds full"
 							tickFormat={v => v}
-							className="stroke-1 stroke-current font-extralight text-sm"
+							className="stroke-1 stroke-current font-extralight text-xs"
 						/>
 						<MarkSeries
 							data={dataFirstWave}
