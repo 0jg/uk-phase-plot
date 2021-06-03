@@ -108,7 +108,7 @@ export default function Home(props) {
 				<h3 className="text-md md:text-xl text-gray-400 pt-2">(log–log)</h3>
 				<h2 className="text-3xl md:text-4xl leading-tight py-4 px-2">
 					Comparing weekly averages of <span style={{color: "rgb(248, 3, 83)"}}>the first wave</span><br /> and {" "}
-					<span style={{color: "rgb(161, 93, 215)"}}>the second wave</span>. The latest data ● is shown.
+					<span style={{color: "rgb(161, 93, 215)"}}>the second wave</span>. The <span style={{color:"rgb(41, 188, 155)"}}>latest data</span>  <span style={{color: "rgb(79, 227, 194)"}}>●</span> is shown.
 				</h2>
 
 				<div className="max-w-screen-sm h-screen m-auto pt-10">
@@ -150,9 +150,9 @@ export default function Home(props) {
 						/>
 						<MarkSeries
 							data={latestData}
-							color="rgb(0,0,0)"
+							color="rgb(79, 227, 194)"
 				      opacityType="category"
-							stroke="rgb(0,0,0)"
+							stroke="rgb(79, 227, 194)"
 				      opacity=""
 							size="5"
 						/>
