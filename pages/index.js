@@ -103,20 +103,24 @@ export default function Home(props) {
 		<main className="flex flex-col items-center justify-center w-screen m-auto min-h-screen dark:bg-black dark:text-white text-center">
 			<div className="w-screen md:max-w-screen-lg">
 				<h1 className="text-5xl md:text-7xl font-bold leading-tighter pt-24 px-2">
-					🇬🇧 Hospital Phase Plot
+					🏴󠁧󠁢󠁥󠁮󠁧󠁿 Hospital Phase Plot
 				</h1>
 				<h3 className="text-md md:text-xl text-gray-400 pt-2">(log–log)</h3>
-				<h2 className="text-3xl md:text-4xl leading-tight py-4 px-2">
+				<h2 className="text-3xl md:text-4xl leading-tight py-4 px-2 mb-4">
 					Comparing weekly averages of <span style={{color: "rgb(248, 3, 83)"}}>the first wave</span><br /> and {" "}
 					<span style={{color: "rgb(161, 93, 215)"}}>the second wave</span>. The <span style={{color:"rgb(41, 188, 155)"}}>latest data</span>  <span style={{color: "rgb(79, 227, 194)"}}>●</span> is shown.
 				</h2>
 
-				<div className="max-w-screen-pg h-screen m-auto pt-10">
+				<a href="https://uk-vaccine.vercel.app" class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
+				  View U.K. Vaccine Progress ›
+				</a>
+
+				<div className="max-w-screen-md h-screen m-auto pt-20">
 					<FlexibleXYPlot
 						yType="log"
 						xType="log"
-						yDomain={[500,  40000]}
-						xDomain={[90, 5000]}
+						yDomain={[400,  40000]}
+						xDomain={[40, 5000]}
 						margin={{left: 60, bottom: 100}}
 						className="m-auto dark:text-white text-black fill-current text-md"
 					>
@@ -160,8 +164,8 @@ export default function Home(props) {
 						<LabelSeries
 							data={[
 								{
-									x: 3000,
-									y: 3200,
+									x: 1400,
+									y: 2200,
 									label: "Mar 23 2020"
 								},
 								{
@@ -170,8 +174,8 @@ export default function Home(props) {
 									label: "Jan 9 2021"
 								},
 								{
-									x: 150,
-									y: 800,
+									x: 50,
+									y: 450,
 									label: "Sep 1 2021"
 								},
 							]}
@@ -199,7 +203,7 @@ export async function getServerSideProps() {
 	let error;
 
 	let res = await fetch(
-		"https://api.coronavirus.data.gov.uk/v2/data?areaType=overview&metric=hospitalCases&metric=newAdmissions&format=json"
+		"https://api.coronavirus.data.gov.uk/v2/data?areaType=nation&areaCode=E92000001&metric=newAdmissions&metric=hospitalCases&format=json"
 	)
 		.then(response => response.json())
 		.then(data => {
