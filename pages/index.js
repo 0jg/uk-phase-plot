@@ -22,9 +22,7 @@ function weeklyAverageAdmissions(dataset) {
 		dataset_weekly.push( item.x )
 	});
 
-	let latestAdmissionsIndex = dataset_weekly.findIndex(el => el !== null)
-
-	return [weeklyAverage(dataset_weekly), latestAdmissionsIndex]
+	return weeklyAverage(dataset_weekly)
 }
 
 function weeklyAverageBedsOccupied(dataset) {
@@ -41,8 +39,6 @@ function weeklyAverage(dataset) {
 	let average = []
 	let dataset_slice = []
 	let index = 0
-
-	console.log(ma(dataset, 7))
 
 	// for (index = 0; index < dataset.length; index+=7) {
 	// 	dataset_slice = dataset.slice(index, index + 7);
@@ -65,64 +61,65 @@ export default function Home(props) {
 	}
 
 	// Initialise arrays
+	let data = [];
 	let dataFirstWave = [];
 	let dataSecondWave = [];
+	let dataDeltaWave = [];
 
-	// Add data points to array
 	props.valuesAdmissions.forEach((item, i) => {
-		if(new Date(props.valuesDates[i]) < new Date("2020-09-01")) {
-			dataFirstWave.push({x: props.valuesAdmissions[i], y: props.valuesBedsOccupied[i]});
-		} else {
-			dataSecondWave.push({x: props.valuesAdmissions[i], y: props.valuesBedsOccupied[i]});
+		data.push({x: props.valuesAdmissions[i], y: props.valuesBedsOccupied[i]})
+	});
+
+	let averageAdmissions = weeklyAverageAdmissions(data).reverse()
+	let averageBedsOccupied = weeklyAverageBedsOccupied(data).reverse()
+
+	data = []
+	averageAdmissions.forEach((item, i) => {
+		if(i < 158) {// days between 27 March and 1 September
+			dataFirstWave.push({x: averageAdmissions[i], y: averageBedsOccupied[i]})
+		} else if (i >= 158 && i < 432) { // days between 1 September and 2 June
+			dataSecondWave.push({x: averageAdmissions[i], y: averageBedsOccupied[i]})
+		} else { // to now
+			dataDeltaWave.push({x: averageAdmissions[i], y: averageBedsOccupied[i]})
 		}
 	});
 
-	let firstWaveWeeklyAverageAdmissions = weeklyAverageAdmissions(dataFirstWave)[0];
-	let firstWaveWeeklyAverageBedsOccupied = weeklyAverageBedsOccupied(dataFirstWave);
-	let secondWaveWeeklyAverageAdmissions = weeklyAverageAdmissions(dataSecondWave)[0];
-	let secondWaveWeeklyAverageBedsOccupied = weeklyAverageBedsOccupied(dataSecondWave);
 
-	let indexOfLatestFullDataset = weeklyAverageAdmissions(dataSecondWave)[1]
-	let latestAdmissions = dataSecondWave[indexOfLatestFullDataset].x
-	let latestBedOccupancy = dataSecondWave[0].y
+	let latestAdmissions = props.valuesAdmissions.find(el => el !== null)
+	let latestBedOccupancy = props.valuesBedsOccupied[0]
 
 	let latestData = [{ x: latestAdmissions, y: latestBedOccupancy }]
 
-	dataFirstWave = []
-	dataSecondWave = []
-
-	firstWaveWeeklyAverageAdmissions.forEach((item, i) => {
-		dataFirstWave.push( { x: firstWaveWeeklyAverageAdmissions[i], y: firstWaveWeeklyAverageBedsOccupied[i] } )
-	});
-
-	secondWaveWeeklyAverageAdmissions.forEach((item, i) => {
-		dataSecondWave.push( { x: secondWaveWeeklyAverageAdmissions[i], y: secondWaveWeeklyAverageBedsOccupied[i] } )
-	});
-
 	return (
+		<>
+
 		<main className="flex flex-col items-center justify-center w-screen m-auto min-h-screen dark:bg-black dark:text-white text-center">
 			<div className="w-screen md:max-w-screen-lg">
-				<h1 className="text-5xl md:text-7xl font-bold leading-tighter pt-24 px-2">
-					🏴󠁧󠁢󠁥󠁮󠁧󠁿 Hospital Phase Plot
+				<h1 className="text-6xl md:text-7xl font-bold leading-tighter pt-24 px-2">
+					🏴󠁧󠁢󠁥󠁮󠁧󠁿<br />Hospital Phase Plot
 				</h1>
-				<h3 className="text-md md:text-xl text-gray-400 pt-2">(log–log)</h3>
-				<h2 className="text-3xl md:text-4xl leading-tight py-4 px-2 mb-4">
-					Comparing weekly averages of <span style={{color: "rgb(248, 3, 83)"}}>the first wave</span><br /> and {" "}
-					<span style={{color: "rgb(161, 93, 215)"}}>the second wave</span>. The <span style={{color:"rgb(41, 188, 155)"}}>latest data</span>  <span style={{color: "rgb(79, 227, 194)"}}>●</span> is shown.
-				</h2>
+				<p className="text-3xl md:text-4xl py-4 px-2 mb-2 text-left md:max-w-screen-md m-auto leading-tight">
+					Comparing the weekly averages of beds full vs. daily admissions during <span style={{color: "rgb(248, 3, 83)"}}>the first wave</span>, {" "}
+					<span style={{color: "rgb(161, 93, 215)"}}>the second wave</span> and <span style={{color: "rgb(255, 149, 0)"}}> since Delta variant dominance</span>. The <span style={{color:"rgb(41, 188, 155)"}}>latest data</span> <span style={{color: "rgb(79, 227, 194)"}}>●</span> are shown.
+				</p>
 
-				<a href="https://uk-vaccine.vercel.app" class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
+				<p className="px-2 mb-8 text-xl md:text-2xl text-gray-700 text-left md:max-w-screen-md m-auto">To learn how to interpret this graph, see <a href="https://twitter.com/BristOliver/status/1398951925631045633">@BristOliver</a>'s discussion.</p>
+
+				<a href="https://uk-vaccine.vercel.app" class="transition-colors bg-white hover:bg-blue-100 text-gray-800 font-semibold py-2 px-4 border border-blue-500 rounded shadow">
 				  View U.K. Vaccine Progress ›
 				</a>
 
-				<div className="max-w-screen-md h-screen m-auto pt-20">
+				<div className="m-auto pt-20 chart">
+
+				<h3 className="text-md md:text-xl text-gray-400 pt-2">(log–log)</h3>
+
 					<FlexibleXYPlot
 						yType="log"
 						xType="log"
 						yDomain={[400,  40000]}
 						xDomain={[40, 5000]}
 						margin={{left: 60, bottom: 100}}
-						className="m-auto dark:text-white text-black fill-current text-md"
+						className="m-auto max-h-screen-md dark:text-white text-black fill-current text-md"
 					>
 						<HorizontalGridLines className="dark:text-gray-600 text-gray-300 border w-4 stroke-1 stroke-current" />
 						<XAxis
@@ -153,6 +150,14 @@ export default function Home(props) {
 							size="5"
 						/>
 						<MarkSeries
+							data={dataDeltaWave}
+							color="rgb(255, 149, 0)"
+				      opacityType="category"
+							stroke="rgb(255, 149, 0)"
+				      opacity="0.5"
+							size="5"
+						/>
+						<MarkSeries
 							data={latestData}
 							color="rgb(79, 227, 194)"
 				      opacityType="category"
@@ -176,7 +181,7 @@ export default function Home(props) {
 								{
 									x: 50,
 									y: 450,
-									label: "Sep 1 2021"
+									label: "Sep 1 2020"
 								},
 							]}
 							className="text-green fill-current"
@@ -190,9 +195,28 @@ export default function Home(props) {
 					<a href="https://github.com/j-griffiths/uk-phase-plot">GitHub</a>. Data
 					from{" "}
 					<a href="https://coronavirus.data.gov.uk/details/download">GOV.UK</a>.
+
+					<p className="px-2 mb-8 text-xs text-gray-700 pt-2">Delta was declared as the U.K.'s dominant strain on June 3 (BMJ 2021;373:n1445).</p>
 				</footer>
 			</div>
 		</main>
+
+		<style jsx>{`
+      .chart{
+				width: 100vw;
+				height: 100vw;
+				max-width: 900px;
+				max-height: 900px;
+			}
+
+			@media(max-width: 900px){
+				.chart{
+					height: 100vh;
+				}
+			}
+    `}</style>
+		</>
+
 	);
 }
 
