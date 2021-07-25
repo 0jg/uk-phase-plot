@@ -1,5 +1,6 @@
 import Head from "next/head";
 import {ma} from "moving-averages"
+import DWChart from 'react-datawrapper-chart'
 import moment from "moment";
 import dateArray from "moment-array-dates";
 import {
@@ -12,7 +13,9 @@ import {
 	LineSeries,
 	XAxis,
 	YAxis,
-	Crosshair
+	Crosshair,
+	VerticalBarSeries,
+  VerticalBarSeriesCanvas
 } from "react-vis";
 
 function weeklyAverageAdmissions(dataset) {
@@ -62,6 +65,7 @@ export default function Home(props) {
 
 	// Initialise arrays
 	let data = [];
+	let dataPredictedHospitalTimeSeries = [];
 	let dataFirstWave = [];
 	let dataSecondWave = [];
 	let dataDeltaWave = [];
@@ -69,6 +73,8 @@ export default function Home(props) {
 	props.valuesAdmissions.forEach((item, i) => {
 		data.push({x: props.valuesAdmissions[i], y: props.valuesBedsOccupied[i]})
 	});
+
+	console.log(dataPredictedHospitalTimeSeries)
 
 	let averageAdmissions = weeklyAverageAdmissions(data).reverse()
 	let averageBedsOccupied = weeklyAverageBedsOccupied(data).reverse()
@@ -93,11 +99,18 @@ export default function Home(props) {
 	return (
 		<>
 
-		<main className="flex flex-col items-center justify-center w-screen m-auto min-h-screen dark:bg-black dark:text-white text-center">
+		<main className="flex flex-col items-center justify-center w-screen m-auto min-h-screen text-center">
 			<div className="w-screen md:max-w-screen-lg">
-				<h1 className="text-6xl md:text-7xl font-bold leading-tighter pt-24 px-2">
-					🏴󠁧󠁢󠁥󠁮󠁧󠁿<br />Hospital Phase Plot
+				<h1 className="text-6xl md:text-7xl font-bold leading-tighter pt-24 px-2 pb-12">
+					🏴󠁧󠁢󠁥󠁮󠁧󠁿<br />Covid Hospitalisations
 				</h1>
+
+				<a href="https://uk-vaccine.vercel.app" class="transition-colors bg-white hover:bg-blue-100 text-gray-800 font-semibold py-2 px-4 border border-blue-500 rounded shadow">
+					View U.K. Vaccine Progress ›
+				</a>
+
+				<hr className="my-20"/>
+
 				<p className="text-3xl md:text-4xl py-4 px-2 mb-2 text-left md:max-w-screen-md m-auto leading-tight">
 					Comparing the weekly averages of beds full vs. daily admissions during <span style={{color: "rgb(248, 3, 83)"}}>the first wave</span>, {" "}
 					<span style={{color: "rgb(161, 93, 215)"}}>the second wave</span> and <span style={{color: "rgb(255, 149, 0)"}}> since Delta variant dominance</span>. The <span style={{color:"rgb(41, 188, 155)"}}>latest data</span> <span style={{color: "rgb(79, 227, 194)"}}>●</span> are shown.
@@ -105,11 +118,7 @@ export default function Home(props) {
 
 				<p className="px-2 mb-8 text-xl md:text-2xl text-gray-700 text-left md:max-w-screen-md m-auto">To learn how to interpret this graph, see <a href="https://twitter.com/BristOliver/status/1398951925631045633">@BristOliver</a>'s discussion.</p>
 
-				<a href="https://uk-vaccine.vercel.app" class="transition-colors bg-white hover:bg-blue-100 text-gray-800 font-semibold py-2 px-4 border border-blue-500 rounded shadow">
-				  View U.K. Vaccine Progress ›
-				</a>
-
-				<div className="m-auto pt-20 chart">
+				<div className="m-auto chart">
 
 				<h3 className="text-md md:text-xl text-gray-400 pt-2">(log–log)</h3>
 
@@ -119,9 +128,9 @@ export default function Home(props) {
 						yDomain={[400,  40000]}
 						xDomain={[40, 5000]}
 						margin={{left: 60, bottom: 100}}
-						className="m-auto max-h-screen-md dark:text-white text-black fill-current text-md"
+						className="m-auto max-h-screen-md text-black fill-current text-md"
 					>
-						<HorizontalGridLines className="dark:text-gray-600 text-gray-300 border w-4 stroke-1 stroke-current" />
+						<HorizontalGridLines className=" text-gray-300 border w-4 stroke-1 stroke-current" />
 						<XAxis
 							title="Daily admissions"
 							tickLabelAngle={-90}
@@ -167,6 +176,7 @@ export default function Home(props) {
 						/>
 
 						<LabelSeries
+							style={{'backgroundColor': 'rgb(0,0,0)'}}
 							data={[
 								{
 									x: 2500,
@@ -175,7 +185,7 @@ export default function Home(props) {
 								},
 								{
 									x: 5000,
-									y: 40000,
+									y: 45000,
 									label: "Jan 9 2021"
 								},
 								{
@@ -184,19 +194,27 @@ export default function Home(props) {
 									label: "Sep 1 2020"
 								},
 							]}
-							className="text-green fill-current"
+							className="text-black fill-current"
 						/>
 
 					</FlexibleXYPlot>
+
+
 				</div>
+
+				<hr className="mt-20"/>
+				<DWChart title="Chart" src="https://datawrapper.dwcdn.net/4uvE2/5/" style={{'margin':'auto','maxWidth':'600px','marginTop':'5em','marginBottom':'5em'}}/>
+
+				<hr className="my-20"/>
+
 				<footer className="text-sm text-gray-500 pb-10">
-					Made by <a href="https://twitter.com/__jackg">@__jackg</a>. Inspired by <a href="https://twitter.com/BristOliver">@BristOliver</a>. Code
+					Made by <a href="https://twitter.com/__jackg">@__jackg</a>. Phase plot chart inspired by <a href="https://twitter.com/BristOliver">@BristOliver</a>. Code
 					available at{" "}
 					<a href="https://github.com/j-griffiths/uk-phase-plot">GitHub</a>. Data
 					from{" "}
 					<a href="https://coronavirus.data.gov.uk/details/download">GOV.UK</a>.
 
-					<p className="px-2 mb-8 text-xs text-gray-700 pt-2">Delta was declared as the U.K.'s dominant strain on June 3 (BMJ 2021;373:n1445).</p>
+					<p className="px-2 mb-8 text-xs text-gray-700 pt-2 ">Delta was declared as the U.K.'s dominant strain on June 3 (BMJ 2021;373:n1445).</p>
 				</footer>
 			</div>
 		</main>
@@ -205,8 +223,8 @@ export default function Home(props) {
       .chart{
 				width: 100vw;
 				height: 100vw;
-				max-width: 900px;
-				max-height: 900px;
+				max-width: 600px;
+				max-height: 600px;
 			}
 
 			@media(max-width: 900px){
