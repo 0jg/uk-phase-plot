@@ -102,16 +102,14 @@ export default function Home(props) {
 		<main className="flex flex-col items-center justify-center w-screen m-auto min-h-screen text-center">
 			<div className="w-screen md:max-w-screen-lg">
 				<h1 className="text-6xl md:text-7xl font-bold leading-tighter pt-24 px-2 pb-12">
-					🏴󠁧󠁢󠁥󠁮󠁧󠁿<br />Covid Hospitalisations
+					🏴󠁧󠁢󠁥󠁮󠁧󠁿<br />Hospital Phase Plot
 				</h1>
 
 				<a href="https://uk-vaccine.vercel.app" class="transition-colors bg-white hover:bg-blue-100 text-gray-800 font-semibold py-2 px-4 border border-blue-500 rounded shadow">
 					View U.K. Vaccine Progress ›
 				</a>
 
-				<hr className="my-20"/>
-
-				<p className="text-3xl md:text-4xl py-4 px-2 mb-2 text-left md:max-w-screen-md m-auto leading-tight">
+				<p className="text-3xl md:text-4xl py-4 px-2 mb-2 text-left md:max-w-screen-md m-auto leading-tight mt-12">
 					Comparing the weekly averages of beds full vs. daily admissions during <span style={{color: "rgb(248, 3, 83)"}}>the first wave</span>, {" "}
 					<span style={{color: "rgb(161, 93, 215)"}}>the second wave</span> and <span style={{color: "rgb(255, 149, 0)"}}> since Delta variant dominance</span>. The <span style={{color:"rgb(41, 188, 155)"}}>latest data</span> <span style={{color: "rgb(79, 227, 194)"}}>●</span> are shown.
 				</p>
@@ -201,11 +199,6 @@ export default function Home(props) {
 
 
 				</div>
-
-				<hr className="mt-20"/>
-				<DWChart title="Chart" src="https://datawrapper.dwcdn.net/4uvE2/5/" style={{'margin':'auto','maxWidth':'600px','marginTop':'5em','marginBottom':'5em'}}/>
-
-				<hr className="my-20"/>
 
 				<footer className="text-sm text-gray-500 pb-10">
 					Made by <a href="https://twitter.com/__jackg">@__jackg</a>. Phase plot chart inspired by <a href="https://twitter.com/BristOliver">@BristOliver</a>. Code
