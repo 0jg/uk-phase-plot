@@ -69,7 +69,8 @@ export default function Home(props) {
 	let dataFirstWave = [];
 	let dataSecondWave = [];
 	let dataDeltaWave = [];
-
+	let dataOmicronWave = [];
+	
 	props.valuesAdmissions.forEach((item, i) => {
 		data.push({x: props.valuesAdmissions[i], y: props.valuesBedsOccupied[i]})
 	});
@@ -85,8 +86,11 @@ export default function Home(props) {
 			dataFirstWave.push({x: averageAdmissions[i], y: averageBedsOccupied[i]})
 		} else if (i >= 158 && i < 432) { // days between 1 September and 2 June
 			dataSecondWave.push({x: averageAdmissions[i], y: averageBedsOccupied[i]})
-		} else { // to now
+		} else if (i >= 432 && i < 610) { // days between 2 June and 27 November
 			dataDeltaWave.push({x: averageAdmissions[i], y: averageBedsOccupied[i]})
+		}
+		else if(i >= 610) {
+			dataOmicronWave.push({x: averageAdmissions[i], y: averageBedsOccupied[i]})
 		}
 	});
 
@@ -110,8 +114,8 @@ export default function Home(props) {
 				</a>
 
 				<p className="text-3xl md:text-4xl py-4 px-2 mb-2 text-left md:max-w-screen-md m-auto leading-tight mt-12">
-					Comparing the weekly averages of beds full vs. daily admissions during <span style={{color: "rgb(248, 3, 83)"}}>the first wave</span>, {" "}
-					<span style={{color: "rgb(161, 93, 215)"}}>the second wave</span> and <span style={{color: "rgb(255, 149, 0)"}}> since Delta variant dominance</span>. The <span style={{color:"rgb(41, 188, 155)"}}>latest data</span> <span style={{color: "rgb(79, 227, 194)"}}>●</span> are shown.
+					Comparing the weekly averages of beds full vs. daily admissions during the first wave <span style={{color: "rgb(200,200,200)"}}>●</span>, {" "}
+					the second wave <span style={{color: "rgb(150,150,150)"}}>●</span>, the Delta wave <span style={{color: "rgb(100,100,100)"}}>●</span> and <span style={{color: "rgb(248, 3, 83)"}}> the Omicron wave ●</span>. The <span style={{color:"rgb(41, 188, 155)"}}>latest data</span> <span style={{color: "rgb(79, 227, 194)"}}>●</span> are shown.
 				</p>
 
 				<p className="px-2 mb-8 text-xl md:text-2xl text-gray-700 text-left md:max-w-screen-md m-auto">To learn how to interpret this graph, see <a href="https://twitter.com/BristOliver/status/1398951925631045633">@BristOliver</a>'s discussion.</p>
@@ -128,6 +132,7 @@ export default function Home(props) {
 						margin={{left: 60, bottom: 100}}
 						className="m-auto max-h-screen-md text-black fill-current text-md"
 					>
+						  
 						<HorizontalGridLines className=" text-gray-300 border w-4 stroke-1 stroke-current" />
 						<XAxis
 							title="Daily admissions"
@@ -142,27 +147,35 @@ export default function Home(props) {
 						/>
 						<MarkSeries
 							data={dataFirstWave}
-							color="rgb(248, 3, 83)"
+							color="rgb(200,200,200)"
 				      opacityType="category"
-							stroke="rgb(248, 3, 83)"
+							stroke="rgb(200,200,200)"
 				      opacity="0.5"
-							size="5"
+							size="4"
 						/>
 						<MarkSeries
 							data={dataSecondWave}
-							color="rgb(161, 93, 215)"
+							color="rgb(150,150,150)"
 				      opacityType="category"
-							stroke="rgb(161, 93, 215)"
+							stroke="rgb(150,150,150)"
 				      opacity="0.5"
-							size="5"
+							size="4"
 						/>
 						<MarkSeries
 							data={dataDeltaWave}
-							color="rgb(255, 149, 0)"
+							color="rgb(100,100,100)"
 				      opacityType="category"
-							stroke="rgb(255, 149, 0)"
+							stroke="rgb(100,100,100)"
 				      opacity="0.5"
-							size="5"
+							size="4"
+						/>
+						<MarkSeries
+							data={dataOmicronWave}
+							color="rgb(248, 3, 83)"
+					  opacityType="category"
+							stroke="rgb(248, 3, 83)"
+					  opacity="0.5"
+							size="4"
 						/>
 						<MarkSeries
 							data={latestData}
@@ -187,12 +200,17 @@ export default function Home(props) {
 									label: "Jan 9 2021"
 								},
 								{
+									x: 60,
+									y: 900,
+									label: "Jun 2 2021"
+								},
+								{
 									x: 50,
 									y: 450,
 									label: "Sep 1 2020"
 								},
 							]}
-							className="text-black fill-current"
+							className="text-black font-bold"
 						/>
 
 					</FlexibleXYPlot>
@@ -207,7 +225,9 @@ export default function Home(props) {
 					from{" "}
 					<a href="https://coronavirus.data.gov.uk/details/download">GOV.UK</a>.
 
-					<p className="px-2 mb-8 text-xs text-gray-700 pt-2 ">Delta was declared as the U.K.'s dominant strain on June 3 (BMJ 2021;373:n1445).</p>
+					<p className="px-2 text-xs text-gray-700 pt-2 ">Delta was declared as the U.K.'s dominant strain on June 3 (BMJ 2021;373:n1445).</p>
+					
+					<p className="px-2 mb-8 text-xs text-gray-700 pt-2 ">The first Omicron case was detected the UK around November 27.</p>
 				</footer>
 			</div>
 		</main>
