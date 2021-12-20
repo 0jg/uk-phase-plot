@@ -183,7 +183,7 @@ export default function Home(props) {
 				      opacityType="category"
 							stroke="rgb(79, 227, 194)"
 				      opacity=""
-							size="5"
+							size="4"
 						/>
 
 						<LabelSeries
